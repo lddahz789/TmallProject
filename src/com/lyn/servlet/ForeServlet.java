@@ -299,4 +299,88 @@ public class ForeServlet extends BaseForeServlet {
 	     
 	    return "@forealipay?oid="+order.getId() +"&total="+total;
 	}
+	
+	
+	public String alipay(HttpServletRequest request, HttpServletResponse response, Page page){
+		return "alipay.jsp";    
+	}
+	
+	public String paied(HttpServletRequest request, HttpServletResponse response, Page page){
+		  int oid = Integer.parseInt(request.getParameter("oid"));
+		  Order order = orderDAO.get(oid);
+		  order.setStatus(orderDAO.waitDelivery);
+		  order.setPayDate(new Date());
+		  orderDAO.update(order);
+		  request.setAttribute("o", order);
+		  return "paied.jsp";
+	}
+	
+	public String bought(HttpServletRequest request, HttpServletResponse response, Page page){
+		User user = (User) request.getSession().getAttribute("user");
+		List<Order> os = orderDAO.list(user.getId(), orderDAO.delete);
+		orderItemDAO.fill(os);
+		request.setAttribute("os", os);
+		return "bought.jsp";
+	}
+	
+	public String confirmPay(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		Order order = orderDAO.get(oid);
+		orderItemDAO.fill(order);
+		request.setAttribute("o", order);
+		return "confirmPay.jsp";
+	}
+	
+	public String orderConfirmed(HttpServletRequest request, HttpServletResponse response, Page page) {
+	    int oid = Integer.parseInt(request.getParameter("oid"));
+	    Order o = orderDAO.get(oid);
+	    o.setStatus(OrderDAO.waitReview);
+	    o.setConfirmDate(new Date());
+	    orderDAO.update(o);
+	    return "orderConfirmed.jsp";
+	}
+	
+	public String deleteOrder(HttpServletRequest request, HttpServletResponse response, Page page){
+	    int oid = Integer.parseInt(request.getParameter("oid"));
+	    Order o = orderDAO.get(oid);
+	    o.setStatus(OrderDAO.delete);
+	    orderDAO.update(o);
+	    return "%success";      
+	}
+	
+	public String review(HttpServletRequest request, HttpServletResponse response, Page page) {
+	    int oid = Integer.parseInt(request.getParameter("oid"));
+	    Order o = orderDAO.get(oid);
+	    orderItemDAO.fill(o);
+	    Product p = o.getOrderItems().get(0).getProduct();
+	    List<Review> reviews = reviewDAO.list(p.getId());
+	    productDAO.setSaleAndReviewNumber(p);
+	    request.setAttribute("p", p);
+	    request.setAttribute("o", o);
+	    request.setAttribute("reviews", reviews);
+	    return "review.jsp";        
+	}
+	
+	public String doreview(HttpServletRequest request, HttpServletResponse response, Page page) {
+	    int oid = Integer.parseInt(request.getParameter("oid"));
+	    Order o = orderDAO.get(oid);
+	    o.setStatus(OrderDAO.finish);
+	    orderDAO.update(o);
+	    int pid = Integer.parseInt(request.getParameter("pid"));
+	    Product p = productDAO.get(pid);
+	     
+	    String content = request.getParameter("content");
+	     
+	    content = HtmlUtils.htmlEscape(content);
+	 
+	    User user =(User) request.getSession().getAttribute("user");
+	    Review review = new Review();
+	    review.setContent(content);
+	    review.setProduct(p);
+	    review.setCreateDate(new Date());
+	    review.setUser(user);
+	    reviewDAO.add(review);
+	     
+	    return "@forereview?oid="+oid+"&showonly=true";     
+	}
 }
