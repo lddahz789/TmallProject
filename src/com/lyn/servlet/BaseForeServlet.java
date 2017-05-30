@@ -51,7 +51,6 @@ public class BaseForeServlet extends HttpServlet{
  
             Method m = this.getClass().getMethod(method, javax.servlet.http.HttpServletRequest.class,
                     javax.servlet.http.HttpServletResponse.class,Page.class);
-             
             String redirect = m.invoke(this,request, response,page).toString();
              
             if(redirect.startsWith("@"))
