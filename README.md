@@ -26,5 +26,5 @@ http://example.bestzhuo.top/tianmao
 
 ## 截图
 
-![1afa755050c14bb98885a1b7b4f205cf-image.png](//os3e5ayd1.bkt.clouddn.com//file/2017/7/1afa755050c14bb98885a1b7b4f205cf-image.png) 
-![d870ec7102ed4c02a7035929453a5a69-image.png](//os3e5ayd1.bkt.clouddn.com//file/2017/7/d870ec7102ed4c02a7035929453a5a69-image.png)
+![1](http://os3e5ayd1.bkt.clouddn.com//file/2017/7/1afa755050c14bb98885a1b7b4f205cf-image.png) 
+![2](http://os3e5ayd1.bkt.clouddn.com//file/2017/7/d870ec7102ed4c02a7035929453a5a69-image.png)
